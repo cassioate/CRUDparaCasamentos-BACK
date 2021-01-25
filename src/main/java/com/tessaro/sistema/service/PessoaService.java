@@ -1,18 +1,20 @@
 package com.tessaro.sistema.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tessaro.sistema.exceptionhandler.CpfJaCadastrado;
-import com.tessaro.sistema.model.Endereco;
+import com.tessaro.sistema.exceptionhandler.exceptions.AindaPossuiCasamento;
+import com.tessaro.sistema.exceptionhandler.exceptions.CpfJaCadastrado;
+import com.tessaro.sistema.exceptionhandler.exceptions.NaoExisteNaBaseException;
 import com.tessaro.sistema.model.Pessoa;
 import com.tessaro.sistema.model.dto.PessoaDTO;
 import com.tessaro.sistema.repository.PessoaRepository;
-import com.tessaro.sistema.util.PessoaUtils;
+import com.tessaro.sistema.service.mapper.PessoaMapper;
+import com.tessaro.sistema.util.CpfUtil;
 
 @Service
 public class PessoaService {
@@ -25,44 +27,55 @@ public class PessoaService {
 	}
 	
 	public Pessoa buscarPorId (Long id){
-		Pessoa pessoa = repository.findById(id).get();
-		if (pessoa != null) {
-			return pessoa;
-		} else {
-			throw new NoSuchElementException();
-		}
+		Optional<Pessoa> pessoa = repository.findById(id);
+		return validarPessoaPorId(pessoa);
 	}
-	
+
 	public PessoaDTO salvar (PessoaDTO pessoaDto){
-		pessoaDto.setCpf(PessoaUtils.foramtarCpf(pessoaDto.getCpf()));
+		pessoaDto.setCpf(CpfUtil.foramtarCpf(pessoaDto.getCpf()));
 		List<Pessoa> jaExiste = repository.findByCpf(pessoaDto.getCpf());
-		
-		if (!jaExiste.isEmpty()) {
-			throw new CpfJaCadastrado();
-		}
-		
-		Pessoa pessoa = new Pessoa();
-		BeanUtils.copyProperties(pessoaDto, pessoa);
-		
-		Endereco endereco = new Endereco();
-		BeanUtils.copyProperties(pessoaDto.getEndereco(), endereco);
-		
-		pessoa.setEndereco(endereco);
-		
+		validarNaoExistenciaNaBase(jaExiste);
+		Pessoa pessoa = PessoaMapper.dtoToPessoa(pessoaDto);
 		repository.save(pessoa);
 		BeanUtils.copyProperties(pessoa, pessoaDto, "id", "casamento");
 		return pessoaDto;
 	}
-
+	
 	public void deletar (String cpf){
+		cpf = CpfUtil.foramtarCpf(cpf);
 		List<Pessoa> pessoa = repository.findByCpf(cpf);
+		Pessoa pessoaSalva = validarPessoaParaDeletar(pessoa);
+		repository.deleteById(pessoaSalva.getId());
+	}
+	
+/*------------------------------------*/
+		/* METODOS ASSISTENTES*/
+	
+	private Pessoa validarPessoaPorId(Optional<Pessoa> pessoa) {
+		if (!pessoa.isEmpty()) {
+			return pessoa.get();
+		} else {
+			throw new NaoExisteNaBaseException("Pessoa informada nao existe na base de dados.");
+		}
+	}
+	
+	private void validarNaoExistenciaNaBase(List<Pessoa> jaExiste) {
+		if (!jaExiste.isEmpty()) {
+			throw new CpfJaCadastrado();
+		}
+	}
+
+	private Pessoa validarPessoaParaDeletar (List<Pessoa> pessoa) {
 		Pessoa pessoaSalva = null;
 		if (!pessoa.isEmpty()) {
 			pessoaSalva = pessoa.get(0);
+			if(pessoaSalva.getCasamento() != null) {
+				throw new AindaPossuiCasamento("Usuario ainda possui associação de casamento!");
+			}
 		} else {
-			throw new NoSuchElementException();
+			throw new NaoExisteNaBaseException("Pessoa não pode ser deletada, pois não existe na base de dados.");
 		}
-		repository.deleteById(pessoaSalva.getId());
+		return pessoaSalva;
 	}
-
+	
 }

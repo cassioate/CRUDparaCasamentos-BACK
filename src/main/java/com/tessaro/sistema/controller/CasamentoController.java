@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tessaro.sistema.model.Casamento;
 import com.tessaro.sistema.model.dto.CasamentoDTO;
 import com.tessaro.sistema.service.CasamentoService;
-import com.tessaro.sistema.util.PessoaUtils;
+import com.tessaro.sistema.service.mapper.PessoaMapper;
 
 @RestController
 @RequestMapping("/casamentos")
@@ -75,7 +75,7 @@ public class CasamentoController {
 						obj.getQtdFotosPreCasamento(),
 						obj.isCaixa(),
 						obj.isPenDrive(),
-						PessoaUtils.converterPessoaToDto(obj.getPessoa())));  
+						PessoaMapper.pessoaToDto(obj.getPessoa())));  
 		return ResponseEntity.ok().body(listDto);
 	}
 	
@@ -88,6 +88,7 @@ public class CasamentoController {
 	
 	@PostMapping
 	public ResponseEntity<CasamentoDTO> salvarCasamento (@Valid @RequestBody CasamentoDTO casamento, @RequestParam String cpfNoiva){
+		
 		CasamentoDTO casamentoSalva = service.salvar(casamento, cpfNoiva);
 		return ResponseEntity.status(HttpStatus.OK).body(casamentoSalva);
 	}

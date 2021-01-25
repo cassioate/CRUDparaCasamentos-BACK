@@ -1,10 +1,9 @@
-package com.tessaro.sistema.exceptionhandler;
+package com.tessaro.sistema.exceptionhandler.exceptions;
 
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class NegocioException extends RuntimeException{
-
 
 	private static final long serialVersionUID = 1L;
 

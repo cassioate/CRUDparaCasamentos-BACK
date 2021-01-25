@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.tessaro.sistema.config.security.UserSS;
 import com.tessaro.sistema.config.usuario.DTO.UserDTO;
-import com.tessaro.sistema.exceptionhandler.RepetidoExcepetion;
+import com.tessaro.sistema.exceptionhandler.exceptions.RepetidoExcepetion;
 
 @Service
 public class UserService {

@@ -1,4 +1,4 @@
-package com.tessaro.sistema.exceptionhandler;
+package com.tessaro.sistema.exceptionhandler.exceptions;
 
 import lombok.NoArgsConstructor;
 

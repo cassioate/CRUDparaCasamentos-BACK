@@ -3,7 +3,6 @@ package com.tessaro.sistema.exceptionhandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -19,6 +18,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.tessaro.sistema.exceptionhandler.exceptions.AindaPossuiCasamento;
+import com.tessaro.sistema.exceptionhandler.exceptions.CpfJaCadastrado;
+import com.tessaro.sistema.exceptionhandler.exceptions.CpfNaoExiste;
+import com.tessaro.sistema.exceptionhandler.exceptions.JaPossuiCasamentoException;
+import com.tessaro.sistema.exceptionhandler.exceptions.NaoExisteNaBaseException;
+import com.tessaro.sistema.exceptionhandler.exceptions.NegocioException;
+import com.tessaro.sistema.exceptionhandler.exceptions.RepetidoExcepetion;
 
 @ControllerAdvice
 public class SistemaExceptionHandler extends ResponseEntityExceptionHandler {
@@ -44,32 +51,40 @@ public class SistemaExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({AindaPossuiCasamento.class })
+	public ResponseEntity<Object> handleAindaPossuiCasamento(AindaPossuiCasamento ex, WebRequest request) {
+		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
+		String mensagemUsuario = messageSource.getMessage("ainda.possui.casamento", null, LocaleContextHolder.getLocale());
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({IllegalArgumentException.class })
-	public ResponseEntity<Object> handleConstraintViolationException(IllegalArgumentException ex, WebRequest request) {
+	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
 		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		String mensagemUsuario = messageSource.getMessage("falta.campo", null, LocaleContextHolder.getLocale());
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
-//	@ExceptionHandler({ConstraintViolationException.class })
-//	public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
-//		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
-//		String mensagemUsuario = messageSource.getMessage("falta.campo", null, LocaleContextHolder.getLocale());
-//		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
-//		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-//	}
-	
-	@ExceptionHandler({ NoSuchElementException.class })
-	public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException ex, WebRequest request) {
+	@ExceptionHandler({JaPossuiCasamentoException.class })
+	public ResponseEntity<Object> handleJaPossuiCasamentoException(JaPossuiCasamentoException ex, WebRequest request) {
 		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
-		String mensagemUsuario = messageSource.getMessage("nao.existe.na.base", null, LocaleContextHolder.getLocale());
+		String mensagemUsuario = messageSource.getMessage("cpf.ja.possui.casamento", null, LocaleContextHolder.getLocale());
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({NaoExisteNaBaseException.class })
+	public ResponseEntity<Object> handleNaoExisteNaBaseException(NaoExisteNaBaseException ex, WebRequest request) {
+		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
+		String mensagemUsuario = messageSource.getMessage("objeto.inexistente", null, LocaleContextHolder.getLocale());
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler({ RepetidoExcepetion.class })
-	public ResponseEntity<Object> handleNoSuchElementException(RepetidoExcepetion ex, WebRequest request) {
+	public ResponseEntity<Object> handleRepetidoExcepetion(RepetidoExcepetion ex, WebRequest request) {
 		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		String mensagemUsuario = messageSource.getMessage("possui.perfil", null, LocaleContextHolder.getLocale());
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
@@ -77,7 +92,7 @@ public class SistemaExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler({ NegocioException.class })
-	public ResponseEntity<Object> handleNoSuchElementException(NegocioException ex, WebRequest request) {
+	public ResponseEntity<Object> handleNegocioException(NegocioException ex, WebRequest request) {
 		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		String mensagemUsuario = messageSource.getMessage("cpf.ja.possui.casamento", null, LocaleContextHolder.getLocale());
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
@@ -85,7 +100,7 @@ public class SistemaExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler({ CpfNaoExiste.class })
-	public ResponseEntity<Object> handleNoSuchElementException(CpfNaoExiste ex, WebRequest request) {
+	public ResponseEntity<Object> handleCpfNaoExiste(CpfNaoExiste ex, WebRequest request) {
 		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		String mensagemUsuario = messageSource.getMessage("cpf.inexistente", null, LocaleContextHolder.getLocale());
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
@@ -93,7 +108,7 @@ public class SistemaExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler({ CpfJaCadastrado.class })
-	public ResponseEntity<Object> handleNoSuchElementException(CpfJaCadastrado ex, WebRequest request) {
+	public ResponseEntity<Object> handleCpfJaCadastrado(CpfJaCadastrado ex, WebRequest request) {
 		String mensagemDev = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		String mensagemUsuario = messageSource.getMessage("cpf.ja.existe", null, LocaleContextHolder.getLocale());
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));

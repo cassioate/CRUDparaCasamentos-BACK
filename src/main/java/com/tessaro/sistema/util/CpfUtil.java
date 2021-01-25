@@ -45,4 +45,16 @@ public class CpfUtil {
 		return validade;
 	}
 	
+	public static String foramtarCpf(String cpf) {
+		if (cpf.length() == 11) {
+			String parte1 = cpf.substring(0, 3);
+			String parte2 = cpf.substring(3, 6);
+			String parte3 = cpf.substring(6, 9);
+			String parte4 = cpf.substring(9, 11);
+			String novoCpf = parte1 + "." + parte2 + "." + parte3 + "-" + parte4;
+			return novoCpf;
+		} else {
+			return cpf;
+		}
+	}
 }

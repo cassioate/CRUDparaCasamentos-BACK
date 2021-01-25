@@ -47,7 +47,7 @@ public class PessoaController {
 	
 	@DeleteMapping("/{cpf}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletar (String cpf) {
+	public void deletar (@PathVariable String cpf) {
 		service.deletar(cpf);
 	}
 }
