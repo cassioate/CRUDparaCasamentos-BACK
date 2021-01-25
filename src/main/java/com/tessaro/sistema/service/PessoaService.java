@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.tessaro.sistema.exceptionhandler.exceptions.AindaPossuiCasamento;
 import com.tessaro.sistema.exceptionhandler.exceptions.CpfJaCadastrado;
 import com.tessaro.sistema.exceptionhandler.exceptions.NaoExisteNaBaseException;
+import com.tessaro.sistema.model.Endereco;
 import com.tessaro.sistema.model.Pessoa;
 import com.tessaro.sistema.model.dto.PessoaDTO;
 import com.tessaro.sistema.repository.PessoaRepository;
@@ -27,8 +28,8 @@ public class PessoaService {
 	}
 	
 	public Pessoa buscarPorId (Long id){
-		Optional<Pessoa> pessoa = repository.findById(id);
-		return validarPessoaPorId(pessoa);
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		return pessoaSalva;
 	}
 
 	public PessoaDTO salvar (PessoaDTO pessoaDto){
@@ -48,15 +49,53 @@ public class PessoaService {
 		repository.deleteById(pessoaSalva.getId());
 	}
 	
+	public void atualizarPropriedadeNoiva(Long id, String variavel) {
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		pessoaSalva.setNoiva(variavel);
+		repository.save(pessoaSalva);
+	}
+
+	public void atualizarPropriedadeNoivo(Long id, String variavel) {
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		pessoaSalva.setNoivo(variavel);
+		repository.save(pessoaSalva);
+	}
+
+	public void atualizarPropriedadeRg(Long id, String variavel) {
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		pessoaSalva.setRg(variavel);
+		repository.save(pessoaSalva);
+	}
+
+	public void atualizarPropriedadeCpf(Long id, String variavel) {
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		pessoaSalva.setCpf(variavel);
+		repository.save(pessoaSalva);
+	}
+
+	public void atualizarPropriedadeTelefone(Long id, String variavel) {
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		pessoaSalva.setTelefone(variavel);
+		repository.save(pessoaSalva);
+	}
+
+	public void atualizarPropriedadeEndereco(Long id, Endereco variavel) {
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		pessoaSalva.setEndereco(variavel);
+		repository.save(pessoaSalva);
+	}
+	
 /*------------------------------------*/
 		/* METODOS ASSISTENTES*/
 	
-	private Pessoa validarPessoaPorId(Optional<Pessoa> pessoa) {
-		if (!pessoa.isEmpty()) {
-			return pessoa.get();
-		} else {
+	public Pessoa buscarPessoaPeloId(Long id) {
+		Optional<Pessoa> pessoaSalva = repository.findById(id);
+		Pessoa pessoa = null;
+		if (!pessoaSalva.isEmpty()) {
+			pessoa = pessoaSalva.get();
 			throw new NaoExisteNaBaseException("Pessoa informada nao existe na base de dados.");
 		}
+		return pessoa;
 	}
 	
 	private void validarNaoExistenciaNaBase(List<Pessoa> jaExiste) {
@@ -77,5 +116,5 @@ public class PessoaService {
 		}
 		return pessoaSalva;
 	}
-	
+
 }

@@ -47,6 +47,14 @@ public class CasamentoDTO {
 	private boolean caixa;
 	@NotNull
 	private boolean penDrive;
+	@NotNull
+	private boolean kitSogra;
+	@NotNull
+	private boolean fotolivroPreCasamento;
+	@NotNull
+	private String tamanhoFotolivros;
+	
+	private String observacoes;
 	
 	private PessoaDTO pessoa;
 

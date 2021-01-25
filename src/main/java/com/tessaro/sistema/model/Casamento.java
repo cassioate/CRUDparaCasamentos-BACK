@@ -39,11 +39,15 @@ public class Casamento {
 	@NotNull
 	private boolean preCasamento;
 	@NotNull
+	private boolean fotolivroPreCasamento;
+	@NotNull
 	private boolean makingOfNoiva;
 	@NotNull
 	private boolean makingOfNoivo;
 	@NotNull
 	private boolean fotolivro;
+	@NotNull
+	private boolean kitSogra;
 	@NotNull
 	private Integer qtdFotosCasamento;
 	private Integer qtdFotosPreCasamento;
@@ -51,17 +55,24 @@ public class Casamento {
 	private boolean caixa;
 	@NotNull
 	private boolean penDrive;
+	@NotNull
+	private String tamanhoFotolivros;
+	
+	private String observacoes;
 	
 	@OneToOne	
 	@JoinColumn(name = "pessoa_id")
 	private Pessoa pessoa;
 
-	public Casamento(LocalDate dataCasamento, LocalDate dataFechamentoDoCasamento, String localCerimonia,
-			String localRecepcao, Double valorPacote, Double valorPago, Double valorReceber, String formaPagamento,
-			boolean preCasamento, boolean makingOfNoiva, boolean makingOfNoivo, boolean fotolivro,
-			Integer qtdFotosCasamento, Integer qtdFotosPreCasamento, boolean caixa,
-			boolean penDrive) {
+	public Casamento(Long id, LocalDate dataCasamento, LocalDate dataFechamentoDoCasamento,
+			String localCerimonia, String localRecepcao, Double valorPacote, Double valorPago,
+			Double valorReceber, String formaPagamento, boolean preCasamento,
+			boolean fotolivroPreCasamento, boolean makingOfNoiva, boolean makingOfNoivo,
+			boolean fotolivro, boolean kitSogra, Integer qtdFotosCasamento,
+			Integer qtdFotosPreCasamento, boolean caixa, boolean penDrive,
+			String tamanhoFotolivros, String observacoes) {
 		super();
+		this.id = id;
 		this.dataCasamento = dataCasamento;
 		this.dataFechamentoDoCasamento = dataFechamentoDoCasamento;
 		this.localCerimonia = localCerimonia;
@@ -71,13 +82,17 @@ public class Casamento {
 		this.valorReceber = valorReceber;
 		this.formaPagamento = formaPagamento;
 		this.preCasamento = preCasamento;
+		this.fotolivroPreCasamento = fotolivroPreCasamento;
 		this.makingOfNoiva = makingOfNoiva;
 		this.makingOfNoivo = makingOfNoivo;
 		this.fotolivro = fotolivro;
+		this.kitSogra = kitSogra;
 		this.qtdFotosCasamento = qtdFotosCasamento;
 		this.qtdFotosPreCasamento = qtdFotosPreCasamento;
 		this.caixa = caixa;
 		this.penDrive = penDrive;
+		this.tamanhoFotolivros = tamanhoFotolivros;
+		this.observacoes = observacoes;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.tessaro.sistema.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,8 +38,8 @@ public class CasamentoService {
 	}
 	
 	public Casamento buscarPorId (Long id){
-		Optional<Casamento> casamento = repository.findById(id);
-		return validandoCasamentoPorId(casamento);
+		Casamento casamento = buscarCasamentoPorId(id);
+		return casamento;
 	}
 
 	public List<Casamento> buscarClienteNome(String nome) {	
@@ -72,9 +73,149 @@ public class CasamentoService {
 		return visualizar;
 	}
 	
+	public void atualizarPropriedadeDataCasamento(Long id, LocalDate variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setDataCasamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeDataFechamentoDoCasamento(Long id, LocalDate variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setDataFechamentoDoCasamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeLocalCerimonia(Long id, String variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setLocalCerimonia(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeLocalRecepcao(Long id, String variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setLocalRecepcao(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeValorPacote(Long id, Double variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setValorPacote(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeValorPago(Long id, Double variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setValorPago(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeValorReceber(Long id, Double variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setValorReceber(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeFormaPagamento(Long id, String variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setFormaPagamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadePreCasamento(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setPreCasamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeMakingOfNoiva(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setMakingOfNoiva(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeMakingOfNoivo(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setMakingOfNoivo(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeFotolivro(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setFotolivro(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeQtdFotosCasamento(Long id, Integer variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setQtdFotosCasamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeQtdFotosPreCasamento(Long id, Integer variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setQtdFotosPreCasamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeCaixa(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setCaixa(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadePenDrive(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setPenDrive(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadePessoa(Long id, String cpf) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		Pessoa pessoaASalvar = buscarPessoaPeloCpf(cpf);
+		pessoaASalvar.setCasamento(casamentoSalvo);
+		casamentoSalvo.setPessoa(pessoaASalvar);
+		repository.save(casamentoSalvo);
+	}
+
+	public void atualizarPropriedadeKitSogra(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setKitSogra(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeFotolivroPreCasamento(Long id, Boolean variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setFotolivroPreCasamento(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeTamanhoFotolivros(Long id, String variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setTamanhoFotolivros(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
+	public void atualizarPropriedadeObservacoes(Long id, String variavel) {
+		Casamento casamentoSalvo = buscarCasamentoPorId(id);
+		casamentoSalvo.setObservacoes(variavel);
+		repository.save(casamentoSalvo);
+	}
+	
 	
 /*------------------------------------*/
 		/* METODOS ASSISTENTES*/
+	
+	public Pessoa buscarPessoaPeloCpf(String cpf) {
+		cpf = CpfUtil.foramtarCpf(cpf);
+		List<Pessoa> pessoaSalva = repositoryPessoa.findByCpf(cpf);
+		Pessoa pessoa = null;
+		if (!pessoaSalva.isEmpty()) {
+			pessoa = pessoaSalva.get(0);
+		} else {	
+			throw new NaoExisteNaBaseException("Pessoa(CPF) informada nao existe na base de dados.");
+		}
+		return pessoa;
+	}
 	
 	private List<CasamentoDTO> validandoListaDeCasamentosDto(List<Casamento> list) {
 		List<CasamentoDTO> casamentosDto = list.stream().map(
@@ -95,6 +236,10 @@ public class CasamentoService {
 														obj.getQtdFotosPreCasamento(),
 														obj.isCaixa(),
 														obj.isPenDrive(),
+														obj.isKitSogra(),
+														obj.isFotolivroPreCasamento(),
+														obj.getTamanhoFotolivros(),
+														obj.getObservacoes(),
 														PessoaMapper.pessoaToDto(obj.getPessoa())
 														))
 												.collect(Collectors.toList());
@@ -136,12 +281,16 @@ public class CasamentoService {
 		}
 	}
 	
-	private Casamento validandoCasamentoPorId(Optional<Casamento> casamento) {
-		if (!casamento.isEmpty()) {
-			return casamento.get();
+	private Casamento buscarCasamentoPorId(Long id) {
+		Optional<Casamento> casamentoSalvo = repository.findById(id);
+		Casamento casamento = null;
+		if (!casamentoSalvo.isEmpty()) {
+			casamento = casamentoSalvo.get();
 		} else {
 			throw new NaoExisteNaBaseException("Casamento informado não se encontra na base de dados");
 		}
+		return casamento;
 	}
+	
 	
 }
